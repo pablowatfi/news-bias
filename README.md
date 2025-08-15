@@ -28,13 +28,17 @@ cd news-bias
 poetry install
 ```
 
-3. Download the model files:
+3. Set up the model:
 
-The model files are not included in the repository due to their size. You can either:
-- Train your own model using the Jupyter notebook `news_bias_finetune_distilbert_bias.ipynb`
-- Request access to the pre-trained model files
+The DistilBERT model was trained in Google Colab due to its computational requirements. The model files are not included in the repository due to their size. You have two options:
 
-Place the model files in `src/news_bias/models/bias_model/`.
+Option A: Train your own model
+- Open `news_bias_finetune_distilbert_bias.ipynb` in Google Colab
+- Follow the notebook instructions to train the model
+- Download the resulting `bias_model` folder
+- Place it in `src/news_bias/models/bias_model/`
+
+Option B: Request access to the pre-trained model files and place them in the same location.
 
 ## Usage
 
@@ -43,15 +47,24 @@ Place the model files in `src/news_bias/models/bias_model/`.
 poetry shell
 ```
 
-2. Run the bias analysis pipeline:
+2. Run the bias analysis pipeline with the model path:
 ```bash
+export MODEL_PATH=/path/to/news-bias/src/news_bias/models/bias_model
 python -m news_bias
 ```
 
+Or specify the model path directly:
+```bash
+MODEL_PATH=/path/to/news-bias/src/news_bias/models/bias_model python -m news_bias
+```
+
 This will:
-1. Scrape headlines from configured news sources
-2. Analyze them for political bias
-3. Save results to a CSV file in the `results/` directory
+1. Load the model from the specified path
+2. Scrape headlines from configured news sources
+3. Analyze them for political bias
+4. Save results to a timestamped CSV file in the `results/` directory
+
+Note: Make sure to replace `/path/to/news-bias` with your actual project path.
 
 ## Project Structure
 
@@ -73,17 +86,29 @@ news-bias/
 
 ## Development
 
+The model training process:
+
+1. The included notebook `news_bias_finetune_distilbert_bias.ipynb` was developed and run in Google Colab to utilize its GPU resources
+2. After training, the model files were downloaded and added to the project structure
+3. The notebook remains in the repository for reference and reproducibility
+
 To train your own model:
 
-1. Open the Jupyter notebook:
+1. Open the notebook in Google Colab (recommended) or locally:
 ```bash
+# Local execution (if you have sufficient GPU resources)
 poetry run jupyter notebook news_bias_finetune_distilbert_bias.ipynb
 ```
 
 2. Follow the notebook instructions to:
-   - Prepare training data
+   - Prepare the training dataset
    - Fine-tune the DistilBERT model
-   - Save the model files
+   - Export and save the model files
+
+3. Move the resulting `bias_model` folder to:
+   ```
+   src/news_bias/models/bias_model/
+   ```
 
 ## Contributing
 
